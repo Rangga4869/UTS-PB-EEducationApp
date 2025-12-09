@@ -27,6 +27,12 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
 
+        <!-- Materi Detail Activity -->
+        <activity
+            android:name=".MateriDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".MateriActivity" />
+
     </application>
 
 </manifest>

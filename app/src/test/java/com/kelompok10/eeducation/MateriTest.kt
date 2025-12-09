@@ -1,140 +1,157 @@
 package com.kelompok10.eeducation
-import android.content.Intent
-import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class MainActivity : AppCompatActivity() {
+import org.junit.Test
+import org.junit.Assert.*
 
-    private lateinit var cardMateri: CardView
-    private lateinit var cardQuiz: CardView
-    private lateinit var cardVideo: CardView
-    private lateinit var cardProfile: CardView
+/**
+ * Unit test untuk data class Materi
+ * Test ini memastikan bahwa model Materi berfungsi dengan benar
+ */
+class MateriTest {
 
-    companion object {
-        private const val TAG = "MainActivity"
+    @Test
+    fun materi_creation_isCorrect() {
+        // Membuat object Materi
+        val materi = Materi(
+            icon = "📚",
+            title = "Pengenalan Pemrograman",
+            description = "Dasar-dasar pemrograman dan algoritma",
+            duration = "15 menit",
+            isCompleted = true
+        )
+
+        // Verifikasi semua property
+        assertEquals("📚", materi.icon)
+        assertEquals("Pengenalan Pemrograman", materi.title)
+        assertEquals("Dasar-dasar pemrograman dan algoritma", materi.description)
+        assertEquals("15 menit", materi.duration)
+        assertTrue(materi.isCompleted)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate: Activity started")
-        setContentView(R.layout.activity_main)
+    @Test
+    fun materi_defaultCompleted_isFalse() {
+        // Membuat Materi tanpa set isCompleted
+        val materi = Materi(
+            icon = "💻",
+            title = "Test Materi",
+            description = "Test Description",
+            duration = "10 menit"
+        )
 
-        // Inisialisasi views
-        initViews()
-
-        // Setup click listeners
-        setupClickListeners()
-
-        // Show welcome message
-        showWelcomeMessage()
+        // Verifikasi default value isCompleted adalah false
+        assertFalse(materi.isCompleted)
     }
 
-    private fun initViews() {
-        cardMateri = findViewById(R.id.cardMateri)
-        cardQuiz = findViewById(R.id.cardQuiz)
-        cardVideo = findViewById(R.id.cardVideo)
-        cardProfile = findViewById(R.id.cardProfile)
+    @Test
+    fun materi_withCompletedTrue_isCorrect() {
+        // Membuat Materi dengan isCompleted = true
+        val materi = Materi(
+            icon = "🔄",
+            title = "Struktur Kontrol",
+            description = "If-else, switch, dan perulangan",
+            duration = "25 menit",
+            isCompleted = true
+        )
+
+        // Verifikasi isCompleted adalah true
+        assertTrue(materi.isCompleted)
     }
 
-    private fun setupClickListeners() {
-        // Card Materi - Navigate to MateriActivity
-        cardMateri.setOnClickListener {
-            Log.d(TAG, "Card Materi clicked")
-            val intent = Intent(this, MateriActivity::class.java)
-            startActivity(intent)
-        }
+    @Test
+    fun materi_withCompletedFalse_isCorrect() {
+        // Membuat Materi dengan isCompleted = false
+        val materi = Materi(
+            icon = "📦",
+            title = "Array dan Collections",
+            description = "Belajar array, list, dan struktur data",
+            duration = "30 menit",
+            isCompleted = false
+        )
 
-        // Card Quiz - Show coming soon dialog
-        cardQuiz.setOnClickListener {
-            Log.d(TAG, "Card Quiz clicked")
-            showComingSoonDialog("Quiz & Latihan")
-        }
-
-        // Card Video - Show coming soon dialog
-        cardVideo.setOnClickListener {
-            Log.d(TAG, "Card Video clicked")
-            showComingSoonDialog("Video Tutorial")
-        }
-
-        // Card Profile - Show profile info
-        cardProfile.setOnClickListener {
-            Log.d(TAG, "Card Profile clicked")
-            showProfileDialog()
-        }
+        // Verifikasi isCompleted adalah false
+        assertFalse(materi.isCompleted)
     }
 
-    private fun showWelcomeMessage() {
-        Log.d(TAG, "Showing welcome message")
-        Toast.makeText(
-            this,
-            "Selamat belajar di E-Education App!",
-            Toast.LENGTH_SHORT
-        ).show()
+    @Test
+    fun materi_equality_isCorrect() {
+        // Data class harus memiliki equals() yang benar
+        val materi1 = Materi("📚", "Title", "Desc", "10 menit", true)
+        val materi2 = Materi("📚", "Title", "Desc", "10 menit", true)
+        val materi3 = Materi("💻", "Other", "Desc", "10 menit", false)
+
+        // Verifikasi equality
+        assertEquals(materi1, materi2) // Sama
+        assertNotEquals(materi1, materi3) // Berbeda
     }
 
-    private fun showComingSoonDialog(feature: String) {
-        Log.d(TAG, "Showing coming soon dialog for: $feature")
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Coming Soon")
-            .setMessage("Fitur $feature akan segera hadir!")
-            .setIcon(android.R.drawable.ic_dialog_info)
-            .setPositiveButton("OK") { dialog, _ ->
-                Log.d(TAG, "Dialog dismissed")
-                dialog.dismiss()
-            }
-            .show()
+    @Test
+    fun materi_copy_isCorrect() {
+        // Test copy function dari data class
+        val original = Materi(
+            icon = "⚙️",
+            title = "Fungsi dan Method",
+            description = "Membuat dan menggunakan fungsi",
+            duration = "20 menit",
+            isCompleted = false
+        )
+
+        // Copy dengan perubahan isCompleted
+        val completed = original.copy(isCompleted = true)
+
+        // Verifikasi
+        assertFalse(original.isCompleted)
+        assertTrue(completed.isCompleted)
+        assertEquals(original.title, completed.title)
+        assertEquals(original.icon, completed.icon)
     }
 
-    private fun showProfileDialog() {
-        Log.d(TAG, "Showing profile dialog")
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Profil Pengguna")
-            .setMessage("""
-                Nama: Mahasiswa IF703
-                Prodi: PJJ Informatika S1
-                Progress: 65%
-                Materi Selesai: 13/20
-            """.trimIndent())
-            .setIcon(android.R.drawable.ic_dialog_info)
-            .setPositiveButton("OK") { dialog, _ ->
-                Log.d(TAG, "Profile dialog dismissed")
-                dialog.dismiss()
-            }
-            .show()
+    @Test
+    fun materi_toString_isCorrect() {
+        // Test toString dari data class
+        val materi = Materi(
+            icon = "🎯",
+            title = "OOP",
+            description = "Object Oriented Programming",
+            duration = "35 menit",
+            isCompleted = true
+        )
+
+        val toString = materi.toString()
+
+        // Verifikasi toString mengandung semua property
+        assertTrue(toString.contains("OOP"))
+        assertTrue(toString.contains("🎯"))
+        assertTrue(toString.contains("35 menit"))
     }
 
-    override fun onBackPressed() {
-        Log.d(TAG, "Back button pressed")
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Keluar Aplikasi")
-            .setMessage("Apakah Anda yakin ingin keluar?")
-            .setPositiveButton("Ya") { _, _ ->
-                Log.d(TAG, "User confirmed exit")
-                super.onBackPressed()
-            }
-            .setNegativeButton("Tidak") { dialog, _ ->
-                Log.d(TAG, "User cancelled exit")
-                dialog.dismiss()
-            }
-            .show()
+    @Test
+    fun materi_hashCode_isCorrect() {
+        // Test hashCode consistency
+        val materi1 = Materi("📱", "Android", "Components", "30 menit", false)
+        val materi2 = Materi("📱", "Android", "Components", "30 menit", false)
+
+        // Objects yang sama harus memiliki hashCode yang sama
+        assertEquals(materi1.hashCode(), materi2.hashCode())
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume: Activity resumed")
-    }
+    @Test
+    fun materi_componentN_isCorrect() {
+        // Test destructuring (component functions)
+        val materi = Materi(
+            icon = "🎨",
+            title = "UI Design",
+            description = "Layout dan Views",
+            duration = "25 menit",
+            isCompleted = true
+        )
 
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: Activity paused")
-    }
+        val (icon, title, description, duration, isCompleted) = materi
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy: Activity destroyed")
+        // Verifikasi destructuring
+        assertEquals("🎨", icon)
+        assertEquals("UI Design", title)
+        assertEquals("Layout dan Views", description)
+        assertEquals("25 menit", duration)
+        assertTrue(isCompleted)
     }
 }
