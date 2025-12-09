@@ -1,5 +1,6 @@
 package com.kelompok10.eeducation
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
@@ -123,18 +124,14 @@ class MateriActivity : AppCompatActivity() {
     }
 
     private fun onMateriClick(materi: Materi) {
-        if (materi.isCompleted) {
-            Toast.makeText(
-                this,
-                "Anda sudah menyelesaikan materi: ${materi.title}",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else {
-            Toast.makeText(
-                this,
-                "Membuka materi: ${materi.title}",
-                Toast.LENGTH_SHORT
-            ).show()
+        // Navigate to detail page
+        val intent = Intent(this, MateriDetailActivity::class.java).apply {
+            putExtra("MATERI_ICON", materi.icon)
+            putExtra("MATERI_TITLE", materi.title)
+            putExtra("MATERI_DESCRIPTION", materi.description)
+            putExtra("MATERI_DURATION", materi.duration)
+            putExtra("MATERI_IS_COMPLETED", materi.isCompleted)
         }
+        startActivity(intent)
     }
 }
