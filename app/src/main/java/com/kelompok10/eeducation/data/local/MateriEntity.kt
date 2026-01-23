@@ -13,6 +13,7 @@ data class Materi(
     val title: String,
     val description: String,
     val duration: String,
+    val learningObjectives: String = "",
     val content: String = "",
     var isCompleted: Boolean = false
 ) : Parcelable
