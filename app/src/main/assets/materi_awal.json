@@ -1,0 +1,82 @@
+[
+    {
+        "icon": "📚",
+        "title": "Pengenalan Pemrograman",
+        "description": "Dasar-dasar pemrograman dan algoritma",
+        "duration": "15 menit",
+        "isCompleted": true,
+        "content": "Pemrograman adalah proses menulis, menguji, dan memelihara kode yang membuat program komputer. Pemrograman memungkinkan komputer untuk melakukan tugas-tugas tertentu sesuai dengan instruksi yang diberikan.\n\nKonsep Dasar:\n1. Algoritma: Langkah-langkah sistematis untuk menyelesaikan masalah.\n2. Flowchart: Diagram yang menggambarkan alur proses.\n3. Pseudocode: Penulisan algoritma yang mirip bahasa pemrograman.\n4. Debugging: Proses menemukan dan memperbaiki bug.\n\nBahasa Populer: Python, Java, JavaScript, C++, Kotlin."
+    },
+    {
+        "icon": "💻",
+        "title": "Variabel dan Tipe Data",
+        "description": "Memahami variabel, tipe data, dan konstanta",
+        "duration": "20 menit",
+        "isCompleted": true,
+        "content": "Variabel adalah tempat penyimpanan data dalam program yang nilainya dapat berubah.\n\nTipe Data Dasar:\n1. Integer: Bilangan bulat (10, -5).\n2. Float/Double: Bilangan desimal (3.14).\n3. String: Teks (\"Hello\").\n4. Boolean: Nilai logika (true/false).\n5. Char: Satu karakter ('A').\n\nAturan Penamaan: Tidak boleh ada spasi, harus dimulai huruf/underscore, dan case sensitive."
+    },
+    {
+        "icon": "🔄",
+        "title": "Struktur Kontrol",
+        "description": "If-else, switch, dan perulangan",
+        "duration": "25 menit",
+        "isCompleted": true,
+        "content": "Struktur kontrol mengatur alur eksekusi program.\n\n1. Percabangan: If-Else dan Switch untuk mengambil keputusan.\n2. Perulangan: For, While, dan Do-While untuk menjalankan kode berulang kali.\n3. Kontrol Perulangan: Break (berhenti), Continue (lompat ke iterasi berikutnya), dan Return (keluar fungsi)."
+    },
+    {
+        "icon": "📦",
+        "title": "Array dan Collections",
+        "description": "Belajar array, list, dan struktur data",
+        "duration": "30 menit",
+        "isCompleted": false,
+        "content": "Materi ini membahas cara menyimpan kumpulan data dalam satu variabel menggunakan Array atau List. Anda akan mempelajari indeks, iterasi array, dan manipulasi data koleksi."
+    },
+    {
+        "icon": "⚙️",
+        "title": "Fungsi dan Method",
+        "description": "Membuat dan menggunakan fungsi",
+        "duration": "20 menit",
+        "isCompleted": false,
+        "content": "Fungsi adalah blok kode yang dapat digunakan kembali untuk menjalankan tugas tertentu. Pelajari cara mendefinisikan parameter, return value, dan cakupan variabel."
+    },
+    {
+        "icon": "🎯",
+        "title": "Object Oriented Programming",
+        "description": "Konsep OOP: Class, Object, Inheritance",
+        "duration": "35 menit",
+        "isCompleted": false,
+        "content": "OOP adalah paradigma pemrograman berdasarkan konsep 'objek'. Fokus utama materi ini adalah Encapsulation, Inheritance, Polymorphism, dan Abstraction."
+    },
+    {
+        "icon": "📱",
+        "title": "Android Components",
+        "description": "Activity, Intent, dan Fragment",
+        "duration": "30 menit",
+        "isCompleted": false,
+        "content": "Memahami blok bangunan aplikasi Android. Pelajari siklus hidup Activity, cara berpindah halaman dengan Intent, dan UI modular dengan Fragment."
+    },
+    {
+        "icon": "🎨",
+        "title": "User Interface Design",
+        "description": "Layout, Views, dan Material Design",
+        "duration": "25 menit",
+        "isCompleted": false,
+        "content": "Belajar merancang tampilan aplikasi yang menarik menggunakan ConstraintLayout, LinearLayout, serta prinsip-prinsip Material Design."
+    },
+    {
+        "icon": "💾",
+        "title": "Data Storage",
+        "description": "SharedPreferences, SQLite, dan Room",
+        "duration": "30 menit",
+        "isCompleted": false,
+        "content": "Mempelajari cara menyimpan data secara permanen di perangkat Android, mulai dari data sederhana (SharedPref) hingga database relasional (Room)."
+    },
+    {
+        "icon": "🌐",
+        "title": "Networking & API",
+        "description": "REST API, Retrofit, dan JSON",
+        "duration": "40 menit",
+        "isCompleted": false,
+        "content": "Cara menghubungkan aplikasi ke internet. Mempelajari request ke server menggunakan library Retrofit dan mengolah data dalam format JSON."
+    }
+]

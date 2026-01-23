@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             .setMessage("Apakah Anda yakin ingin keluar?")
             .setPositiveButton("Ya") { _, _ ->
                 Log.d(TAG, "User confirmed exit")
-                super.onBackPressed()
+                finish()
             }
             .setNegativeButton("Tidak") { dialog, _ ->
                 Log.d(TAG, "User cancelled exit")

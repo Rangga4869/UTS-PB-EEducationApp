@@ -6,7 +6,8 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
+import com.kelompok10.eeducation.data.local.Materi
 
 class MateriDetailActivity : AppCompatActivity() {
 
@@ -19,6 +20,9 @@ class MateriDetailActivity : AppCompatActivity() {
     private lateinit var tvObjectives: TextView
     private lateinit var cbCompleted: CheckBox
     private lateinit var btnStartQuiz: Button
+    
+    private lateinit var viewModel: MateriViewModel
+    private var currentMateri: Materi? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,16 +30,19 @@ class MateriDetailActivity : AppCompatActivity() {
 
         // Initialize views
         initViews()
+        
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this)[MateriViewModel::class.java]
 
-        // Get data from intent
-        val icon = intent.getStringExtra("MATERI_ICON") ?: "📚"
-        val title = intent.getStringExtra("MATERI_TITLE") ?: "Judul Materi"
-        val description = intent.getStringExtra("MATERI_DESCRIPTION") ?: "Deskripsi materi"
-        val duration = intent.getStringExtra("MATERI_DURATION") ?: "15 menit"
-        val isCompleted = intent.getBooleanExtra("MATERI_IS_COMPLETED", false)
-
-        // Set data to views
-        displayMateriDetail(icon, title, description, duration, isCompleted)
+        // Get Materi object from intent (Parcelable)
+        currentMateri = intent.getParcelableExtra("MATERI_DATA")
+        
+        currentMateri?.let { materi ->
+            displayMateriDetail(materi)
+        } ?: run {
+            Toast.makeText(this, "Error: Data materi tidak ditemukan", Toast.LENGTH_SHORT).show()
+            finish()
+        }
 
         // Setup click listeners
         setupClickListeners()
@@ -53,24 +60,24 @@ class MateriDetailActivity : AppCompatActivity() {
         btnStartQuiz = findViewById(R.id.btnStartQuiz)
     }
 
-    private fun displayMateriDetail(
-        icon: String,
-        title: String,
-        description: String,
-        duration: String,
-        isCompleted: Boolean
-    ) {
-        tvIcon.text = icon
-        tvTitle.text = title
-        tvDescription.text = description
-        tvDuration.text = "⏱️ $duration"
-        cbCompleted.isChecked = isCompleted
+    private fun displayMateriDetail(materi: Materi) {
+        tvIcon.text = materi.icon
+        tvTitle.text = materi.title
+        tvDescription.text = materi.description
+        tvDuration.text = "⏱️ ${materi.duration}"
+        cbCompleted.isChecked = materi.isCompleted
 
-        // Set detailed content based on title (you can customize this)
-        setDetailedContent(title)
+        // Set content from database or use detailed content method
+        if (materi.content.isNotEmpty()) {
+            tvContent.text = materi.content
+            setLearningObjectives(materi.title)
+        } else {
+            // Fallback to detailed content method
+            setDetailedContent(materi.title)
+        }
     }
 
-    private fun setDetailedContent(title: String) {
+    private fun setLearningObjectives(title: String) {
         // Set learning objectives
         val objectives = when (title) {
             "Pengenalan Pemrograman" -> """
@@ -102,6 +109,11 @@ class MateriDetailActivity : AppCompatActivity() {
             """.trimIndent()
         }
         tvObjectives.text = objectives
+    }
+
+    private fun setDetailedContent(title: String) {
+        // Set learning objectives
+        setLearningObjectives(title)
 
         // Set main content
         val content = when (title) {
@@ -226,12 +238,23 @@ class MateriDetailActivity : AppCompatActivity() {
             finish()
         }
 
-        // Checkbox completed
+        // Checkbox completed - Update to database via ViewModel
         cbCompleted.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                Toast.makeText(this, "Materi ditandai sebagai selesai ✓", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Materi ditandai belum selesai", Toast.LENGTH_SHORT).show()
+            currentMateri?.let { materi ->
+                // Update the completion status
+                val updatedMateri = materi.copy(isCompleted = isChecked)
+                
+                // Update in database via ViewModel
+                viewModel.updateMateri(updatedMateri)
+                
+                // Update current materi reference
+                currentMateri = updatedMateri
+                
+                if (isChecked) {
+                    Toast.makeText(this, "Materi ditandai sebagai selesai ✓", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Materi ditandai belum selesai", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
