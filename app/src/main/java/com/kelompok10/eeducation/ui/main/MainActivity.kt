@@ -1,24 +1,37 @@
 package com.kelompok10.eeducation.ui.main
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.FileProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kelompok10.eeducation.ui.materi.MateriActivity
 import com.kelompok10.eeducation.R
+import com.kelompok10.eeducation.ui.news.NewsActivity
+import com.kelompok10.eeducation.utils.DownloadPdfTask
+import com.kelompok10.eeducation.utils.NetworkUtils
+import java.io.File
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var cardMateri: CardView
     private lateinit var cardQuiz: CardView
     private lateinit var cardVideo: CardView
     private lateinit var cardProfile: CardView
+    private lateinit var cardNews: CardView
+    private lateinit var cardDownload: CardView
+    
+    private var progressDialog: ProgressDialog? = null
 
     companion object {
         private const val TAG = "MainActivity"
+        private const val KURIKULUM_URL = "https://github.com/Rangga4869/UTS-PB-EEducationApp/raw/refs/heads/dev-faisal/assets/materi/KURIKULUM.pdf"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +54,8 @@ class MainActivity : AppCompatActivity() {
         cardQuiz = findViewById(R.id.cardQuiz)
         cardVideo = findViewById(R.id.cardVideo)
         cardProfile = findViewById(R.id.cardProfile)
+        cardNews = findViewById(R.id.cardNews)
+        cardDownload = findViewById(R.id.cardDownload)
     }
 
     private fun setupClickListeners() {
@@ -67,6 +82,27 @@ class MainActivity : AppCompatActivity() {
         cardProfile.setOnClickListener {
             Log.d(TAG, "Card Profile clicked")
             showProfileDialog()
+        }
+
+        // Card News - Navigate to NewsActivity
+        cardNews.setOnClickListener {
+            Log.d(TAG, "Card News clicked")
+            if (NetworkUtils.isNetworkAvailable(this)) {
+                val intent = Intent(this, NewsActivity::class.java)
+                startActivity(intent)
+            } else {
+                showNetworkError()
+            }
+        }
+
+        // Card Download - Download Kurikulum PDF
+        cardDownload.setOnClickListener {
+            Log.d(TAG, "Card Download clicked")
+            if (NetworkUtils.isNetworkAvailable(this)) {
+                startPdfDownload()
+            } else {
+                showNetworkError()
+            }
         }
     }
 
@@ -110,34 +146,94 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    override fun onBackPressed() {
-        Log.d(TAG, "Back button pressed")
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Keluar Aplikasi")
-            .setMessage("Apakah Anda yakin ingin keluar?")
-            .setPositiveButton("Ya") { _, _ ->
-                Log.d(TAG, "User confirmed exit")
-                finish()
+    private fun startPdfDownload() {
+        Log.d(TAG, "Starting PDF download")
+        
+        // Create progress dialog
+        progressDialog = ProgressDialog(this).apply {
+            setTitle("Downloading")
+            setMessage("Downloading Kurikulum PDF...")
+            setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+            setCancelable(false)
+            max = 100
+        }
+
+        val downloadTask = DownloadPdfTask(this, object : DownloadPdfTask.DownloadListener {
+            override fun onDownloadStarted() {
+                progressDialog?.show()
             }
-            .setNegativeButton("Tidak") { dialog, _ ->
-                Log.d(TAG, "User cancelled exit")
+
+            override fun onProgressUpdate(progress: Int) {
+                progressDialog?.progress = progress
+            }
+
+            override fun onDownloadComplete(file: File) {
+                progressDialog?.dismiss()
+                showDownloadCompleteDialog(file)
+            }
+
+            override fun onDownloadFailed(error: String) {
+                progressDialog?.dismiss()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Download failed: $error",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+
+        downloadTask.execute(KURIKULUM_URL)
+    }
+
+    private fun showDownloadCompleteDialog(file: File) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Download Complete")
+            .setMessage("Kurikulum PDF has been downloaded successfully!\n\nFile: ${file.name}\nLocation: ${file.parent}")
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .setPositiveButton("Open") { _, _ ->
+                openPdfFile(file)
+            }
+            .setNegativeButton("Close") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume: Activity resumed")
+    private fun openPdfFile(file: File) {
+        try {
+            val uri: Uri = FileProvider.getUriForFile(
+                this,
+                "${applicationContext.packageName}.provider",
+                file
+            )
+            
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/pdf")
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            }
+            
+            startActivity(Intent.createChooser(intent, "Open PDF with"))
+        } catch (e: Exception) {
+            Log.e(TAG, "Error opening PDF", e)
+            Toast.makeText(this, "No PDF reader app found", Toast.LENGTH_LONG).show()
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "onPause: Activity paused")
+    private fun showNetworkError() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("No Internet Connection")
+            .setMessage("Please check your internet connection and try again.")
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        progressDialog?.dismiss()
         Log.d(TAG, "onDestroy: Activity destroyed")
     }
 }
