@@ -1,4 +1,4 @@
-package com.kelompok10.eeducation
+package com.kelompok10.eeducation.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.kelompok10.eeducation.R
 import com.kelompok10.eeducation.data.local.Materi
 
 class MateriAdapter(
@@ -51,7 +52,7 @@ class MateriAdapter(
     fun updateData(newMateriList: List<Materi>) {
         val diffCallback = MateriDiffCallback(materiList, newMateriList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        
+
         materiList = newMateriList
         diffResult.dispatchUpdatesTo(this)
     }
@@ -60,15 +61,15 @@ class MateriAdapter(
         private val oldList: List<Materi>,
         private val newList: List<Materi>
     ) : DiffUtil.Callback() {
-        
+
         override fun getOldListSize() = oldList.size
-        
+
         override fun getNewListSize() = newList.size
-        
+
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition].id == newList[newItemPosition].id
         }
-        
+
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition] == newList[newItemPosition]
         }

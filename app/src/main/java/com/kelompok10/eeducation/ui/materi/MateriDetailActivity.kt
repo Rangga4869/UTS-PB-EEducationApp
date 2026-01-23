@@ -1,4 +1,4 @@
-package com.kelompok10.eeducation
+package com.kelompok10.eeducation.ui.materi
 
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +7,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.kelompok10.eeducation.ui.viewmodel.MateriViewModel
+import com.kelompok10.eeducation.R
 import com.kelompok10.eeducation.data.local.Materi
 
 class MateriDetailActivity : AppCompatActivity() {

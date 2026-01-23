@@ -1,4 +1,4 @@
-package com.kelompok10.eeducation
+package com.kelompok10.eeducation.ui.materi
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kelompok10.eeducation.ui.adapter.MateriAdapter
+import com.kelompok10.eeducation.ui.viewmodel.MateriViewModel
+import com.kelompok10.eeducation.R
 import com.kelompok10.eeducation.data.local.Materi
 
 class MateriActivity : AppCompatActivity() {

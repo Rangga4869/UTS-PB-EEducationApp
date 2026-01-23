@@ -1,4 +1,4 @@
-package com.kelompok10.eeducation
+package com.kelompok10.eeducation.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,7 +14,7 @@ class MateriViewModel(application: Application) : AndroidViewModel(application) 
     val allMateri: LiveData<List<Materi>>
 
     init {
-        val dao = AppDatabase.getDatabase(application).materiDao()
+        val dao = AppDatabase.Companion.getDatabase(application).materiDao()
         repository = MateriRepository(dao)
         allMateri = repository.allMateri
     }

@@ -13,7 +13,7 @@
 
         <!-- Main Activity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,15 +23,15 @@
 
         <!-- Materi Activity -->
         <activity
-            android:name=".MateriActivity"
+            android:name=".ui.materi.MateriActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.main.MainActivity" />
 
         <!-- Materi Detail Activity -->
         <activity
-            android:name=".MateriDetailActivity"
+            android:name=".ui.materi.MateriDetailActivity"
             android:exported="false"
-            android:parentActivityName=".MateriActivity" />
+            android:parentActivityName=".ui.materi.MateriActivity" />
 
     </application>
 

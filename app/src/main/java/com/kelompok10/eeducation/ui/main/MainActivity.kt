@@ -1,4 +1,5 @@
-package com.kelompok10.eeducation
+package com.kelompok10.eeducation.ui.main
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -6,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.kelompok10.eeducation.ui.materi.MateriActivity
+import com.kelompok10.eeducation.R
 
 class MainActivity : AppCompatActivity() {
 
