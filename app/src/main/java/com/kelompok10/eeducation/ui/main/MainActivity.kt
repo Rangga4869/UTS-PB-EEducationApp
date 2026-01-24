@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kelompok10.eeducation.ui.materi.MateriActivity
 import com.kelompok10.eeducation.R
 import com.kelompok10.eeducation.ui.news.NewsActivity
 import com.kelompok10.eeducation.ui.settings.SettingsActivity
+import com.kelompok10.eeducation.ui.viewmodel.MateriViewModel
 import com.kelompok10.eeducation.utils.DownloadPdfTask
 import com.kelompok10.eeducation.utils.NetworkUtils
 import com.kelompok10.eeducation.utils.SettingsManager
@@ -28,10 +30,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cardProfile: CardView
     private lateinit var cardNews: CardView
     private lateinit var cardDownload: CardView
+    private lateinit var cardStudyTracker: CardView
     private lateinit var cardSettings: CardView
     
     private var progressDialog: ProgressDialog? = null
     private lateinit var settingsManager: SettingsManager
+    private lateinit var materiViewModel: MateriViewModel
+    
+    private var completedMateriCount = 0
+    private var totalMateriCount = 0
 
     companion object {
         private const val TAG = "MainActivity"
@@ -46,6 +53,9 @@ class MainActivity : AppCompatActivity() {
         settingsManager = SettingsManager(this)
         settingsManager.applyTheme()
         
+        // Initialize MateriViewModel
+        materiViewModel = ViewModelProvider(this)[MateriViewModel::class.java]
+        
         setContentView(R.layout.activity_main)
 
         // Inisialisasi views
@@ -53,6 +63,9 @@ class MainActivity : AppCompatActivity() {
 
         // Setup click listeners
         setupClickListeners()
+        
+        // Observe materi progress
+        observeMateriProgress()
 
         // Show welcome message
         showWelcomeMessage()
@@ -65,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         cardProfile = findViewById(R.id.cardProfile)
         cardNews = findViewById(R.id.cardNews)
         cardDownload = findViewById(R.id.cardDownload)
+        cardStudyTracker = findViewById(R.id.cardStudyTracker)
         cardSettings = findViewById(R.id.cardSettings)
     }
 
@@ -115,6 +129,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Card Study Tracker - Navigate to StudyTrackerActivity
+        cardStudyTracker.setOnClickListener {
+            Log.d(TAG, "Card Study Tracker clicked")
+            val intent = Intent(this, com.kelompok10.eeducation.ui.studytracker.StudyTrackerActivity::class.java)
+            startActivity(intent)
+        }
+
         // Card Settings - Navigate to SettingsActivity
         cardSettings.setOnClickListener {
             Log.d(TAG, "Card Settings clicked")
@@ -150,14 +171,21 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Showing profile dialog")
         val userName = settingsManager.getUserName()
         val themeMode = settingsManager.getThemeDisplayName()
+        
+        val progressPercentage = if (totalMateriCount > 0) {
+            (completedMateriCount * 100 / totalMateriCount)
+        } else {
+            0
+        }
+        
         MaterialAlertDialogBuilder(this)
             .setTitle("Profil Pengguna")
             .setMessage("""
                 Nama: $userName
                 Prodi: PJJ Informatika S1
                 Tema: $themeMode
-                Progress: 65%
-                Materi Selesai: 13/20
+                Progress: $progressPercentage%
+                Materi Selesai: $completedMateriCount/$totalMateriCount
             """.trimIndent())
             .setIcon(android.R.drawable.ic_dialog_info)
             .setPositiveButton("OK") { dialog, _ ->
@@ -242,6 +270,16 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e(TAG, "Error opening PDF", e)
             Toast.makeText(this, "No PDF reader app found", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun observeMateriProgress() {
+        materiViewModel.allMateri.observe(this) { materiList ->
+            materiList?.let {
+                totalMateriCount = it.size
+                completedMateriCount = it.count { materi -> materi.isCompleted }
+                Log.d(TAG, "Progress updated: $completedMateriCount/$totalMateriCount completed")
+            }
         }
     }
 

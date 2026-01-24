@@ -5,6 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <!-- Permissions for Foreground Service and Battery Monitoring -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -60,6 +67,35 @@
             android:exported="false"
             android:parentActivityName=".ui.main.MainActivity"
             android:label="Pengaturan" />
+
+        <!-- Study Tracker Activity -->
+        <activity
+            android:name=".ui.studytracker.StudyTrackerActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:label="Study Tracker" />
+
+        <!-- Study Timer Service -->
+        <service
+            android:name=".background.service.StudyTimerService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Study timer for tracking learning sessions" />
+        </service>
+
+        <!-- Battery Level Receiver -->
+        <receiver
+            android:name=".background.receiver.BatteryLevelReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
