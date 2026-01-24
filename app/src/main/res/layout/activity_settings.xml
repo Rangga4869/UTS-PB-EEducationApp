@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/app_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
+            app:cardBackgroundColor="@color/card_background"
             app:cardElevation="4dp"
             app:cardCornerRadius="0dp">
 
@@ -22,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@android:color/white"
                 android:padding="16dp">
 
                 <RelativeLayout
@@ -35,7 +35,7 @@
                         android:layout_height="wrap_content"
                         android:text="← Kembali"
                         android:textSize="16sp"
-                        android:textColor="#1976D2"
+                        android:textColor="?attr/colorPrimary"
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="8dp"
@@ -49,6 +49,7 @@
                         android:text="⚙️ Pengaturan"
                         android:textSize="24sp"
                         android:textStyle="bold"
+                        android:textColor="@color/text_primary"
                         android:layout_centerInParent="true" />
                 </RelativeLayout>
 
@@ -58,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:text="Tema Aktif: Sistem"
                     android:textSize="12sp"
-                    android:textColor="#666666"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginTop="8dp"
                     android:layout_gravity="center_horizontal" />
             </LinearLayout>
@@ -70,14 +71,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/card_background"
             app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@android:color/white">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,7 +86,7 @@
                     android:text="👤 Profil Pengguna"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
+                    android:textColor="@color/text_primary"
                     android:layout_marginBottom="12dp" />
 
                 <TextView
@@ -93,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:text="Nama Pengguna"
                     android:textSize="14sp"
-                    android:textColor="#666666"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginBottom="4dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -120,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:text="Nama ini akan ditampilkan di profil dan halaman utama"
                     android:textSize="12sp"
-                    android:textColor="#999999"
+                    android:textColor="@color/text_tertiary"
                     android:layout_marginTop="4dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -133,14 +134,14 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/card_background"
             app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@android:color/white">
+                android:padding="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -148,7 +149,7 @@
                     android:text="🎨 Tema Aplikasi"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
+                    android:textColor="@color/text_primary"
                     android:layout_marginBottom="12dp" />
 
                 <TextView
@@ -156,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:text="Pilih tema tampilan aplikasi"
                     android:textSize="14sp"
-                    android:textColor="#666666"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginBottom="12dp" />
 
                 <RadioGroup
@@ -172,7 +173,7 @@
                         android:text="☀️ Terang"
                         android:textSize="16sp"
                         android:padding="12dp"
-                        android:buttonTint="#1976D2" />
+                        android:buttonTint="?attr/colorPrimary" />
 
                     <RadioButton
                         android:id="@+id/rbDark"
@@ -181,7 +182,7 @@
                         android:text="🌙 Gelap"
                         android:textSize="16sp"
                         android:padding="12dp"
-                        android:buttonTint="#1976D2" />
+                        android:buttonTint="?attr/colorPrimary" />
 
                     <RadioButton
                         android:id="@+id/rbSystem"
@@ -190,7 +191,7 @@
                         android:text="🔄 Ikuti Sistem"
                         android:textSize="16sp"
                         android:padding="12dp"
-                        android:buttonTint="#1976D2"
+                        android:buttonTint="?attr/colorPrimary"
                         android:checked="true" />
                 </RadioGroup>
 
@@ -199,7 +200,7 @@
                     android:layout_height="wrap_content"
                     android:text="Tema 'Ikuti Sistem' akan menyesuaikan dengan pengaturan perangkat Anda"
                     android:textSize="12sp"
-                    android:textColor="#999999"
+                    android:textColor="@color/text_tertiary"
                     android:layout_marginTop="8dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -230,7 +231,7 @@
                 android:layout_height="56dp"
                 android:text="🔄 Reset ke Default"
                 android:textSize="16sp"
-                android:textColor="#D32F2F"
+                android:textColor="?attr/colorError"
                 android:background="@drawable/button_secondary" />
         </LinearLayout>
 
@@ -242,14 +243,14 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/card_background"
             app:cardElevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:background="#E3F2FD">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -257,7 +258,7 @@
                     android:text="ℹ️ Informasi"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#1976D2"
+                    android:textColor="?attr/colorPrimary"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
@@ -265,7 +266,7 @@
                     android:layout_height="wrap_content"
                     android:text="• Pengaturan akan disimpan secara lokal di perangkat Anda\n• Perubahan tema akan langsung diterapkan\n• Data pengaturan tetap tersimpan meskipun aplikasi ditutup"
                     android:textSize="13sp"
-                    android:textColor="#666666"
+                    android:textColor="@color/text_secondary"
                     android:lineSpacingExtra="4dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
