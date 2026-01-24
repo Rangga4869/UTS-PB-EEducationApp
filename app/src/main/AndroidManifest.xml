@@ -54,6 +54,13 @@
             android:exported="false"
             android:parentActivityName=".ui.main.MainActivity" />
 
+        <!-- Settings Activity -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:label="Pengaturan" />
+
     </application>
 
 </manifest>

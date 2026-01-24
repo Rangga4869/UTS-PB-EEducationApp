@@ -13,8 +13,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kelompok10.eeducation.ui.materi.MateriActivity
 import com.kelompok10.eeducation.R
 import com.kelompok10.eeducation.ui.news.NewsActivity
+import com.kelompok10.eeducation.ui.settings.SettingsActivity
 import com.kelompok10.eeducation.utils.DownloadPdfTask
 import com.kelompok10.eeducation.utils.NetworkUtils
+import com.kelompok10.eeducation.utils.SettingsManager
 import java.io.File
 
 @Suppress("DEPRECATION")
@@ -26,8 +28,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cardProfile: CardView
     private lateinit var cardNews: CardView
     private lateinit var cardDownload: CardView
+    private lateinit var cardSettings: CardView
     
     private var progressDialog: ProgressDialog? = null
+    private lateinit var settingsManager: SettingsManager
 
     companion object {
         private const val TAG = "MainActivity"
@@ -37,6 +41,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate: Activity started")
+        
+        // Initialize SettingsManager and apply theme
+        settingsManager = SettingsManager(this)
+        settingsManager.applyTheme()
+        
         setContentView(R.layout.activity_main)
 
         // Inisialisasi views
@@ -56,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         cardProfile = findViewById(R.id.cardProfile)
         cardNews = findViewById(R.id.cardNews)
         cardDownload = findViewById(R.id.cardDownload)
+        cardSettings = findViewById(R.id.cardSettings)
     }
 
     private fun setupClickListeners() {
@@ -104,13 +114,21 @@ class MainActivity : AppCompatActivity() {
                 showNetworkError()
             }
         }
+
+        // Card Settings - Navigate to SettingsActivity
+        cardSettings.setOnClickListener {
+            Log.d(TAG, "Card Settings clicked")
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun showWelcomeMessage() {
         Log.d(TAG, "Showing welcome message")
+        val userName = settingsManager.getUserName()
         Toast.makeText(
             this,
-            "Selamat belajar di E-Education App!",
+            "Selamat belajar, $userName!",
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -130,11 +148,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileDialog() {
         Log.d(TAG, "Showing profile dialog")
+        val userName = settingsManager.getUserName()
+        val themeMode = settingsManager.getThemeDisplayName()
         MaterialAlertDialogBuilder(this)
             .setTitle("Profil Pengguna")
             .setMessage("""
-                Nama: Mahasiswa IF703
+                Nama: $userName
                 Prodi: PJJ Informatika S1
+                Tema: $themeMode
                 Progress: 65%
                 Materi Selesai: 13/20
             """.trimIndent())
@@ -142,6 +163,10 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, _ ->
                 Log.d(TAG, "Profile dialog dismissed")
                 dialog.dismiss()
+            }
+            .setNeutralButton("Pengaturan") { _, _ ->
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
             }
             .show()
     }
