@@ -1,6 +1,9 @@
 package com.kelompok10.eeducation.ui.studytracker
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.app.TimePickerDialog
 import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
@@ -8,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -16,8 +20,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.kelompok10.eeducation.R
+import com.kelompok10.eeducation.background.receiver.StudyReminderReceiver
 import com.kelompok10.eeducation.background.service.StudyTimerService
 import com.kelompok10.eeducation.utils.NotificationHelper
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class StudyTrackerActivity : AppCompatActivity() {
@@ -25,9 +31,11 @@ class StudyTrackerActivity : AppCompatActivity() {
     private lateinit var tvTimer: TextView
     private lateinit var tvTotalStudyTime: TextView
     private lateinit var tvBatteryStatus: TextView
+    private lateinit var tvReminderStatus: TextView
     private lateinit var btnStart: Button
     private lateinit var btnPause: Button
     private lateinit var btnStop: Button
+    private lateinit var btnSetReminder: Button
 
     private var isTimerRunning = false
     private var isTimerPaused = false
@@ -97,6 +105,7 @@ class StudyTrackerActivity : AppCompatActivity() {
         initializeViews()
         setupClickListeners()
         loadTimerState() // Initial load
+        updateReminderStatus() // Load reminder status
         checkAndRequestNotificationPermission()
         NotificationHelper.createNotificationChannels(this)
         
@@ -109,9 +118,11 @@ class StudyTrackerActivity : AppCompatActivity() {
         tvTimer = findViewById(R.id.tv_timer)
         tvTotalStudyTime = findViewById(R.id.tv_total_study_time)
         tvBatteryStatus = findViewById(R.id.tv_battery_status)
+        tvReminderStatus = findViewById(R.id.tv_reminder_status)
         btnStart = findViewById(R.id.btn_start)
         btnPause = findViewById(R.id.btn_pause)
         btnStop = findViewById(R.id.btn_stop)
+        btnSetReminder = findViewById(R.id.btn_set_reminder)
     }
 
     // FIX 4: Buttons explicitly start/stop the UI loop for immediate feedback
@@ -139,6 +150,10 @@ class StudyTrackerActivity : AppCompatActivity() {
             stopLocalUiLoop()
             tvTimer.text = "00:00:00"
             updateButtons()
+        }
+
+        btnSetReminder.setOnClickListener {
+            showTimePickerDialog()
         }
     }
 
@@ -277,5 +292,168 @@ class StudyTrackerActivity : AppCompatActivity() {
                 notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+    }
+
+    // ===== Daily Study Reminder Methods =====
+
+    private fun showTimePickerDialog() {
+        val prefs = getSharedPreferences("StudyReminderPrefs", Context.MODE_PRIVATE)
+        val savedHour = prefs.getInt("reminder_hour", 9)
+        val savedMinute = prefs.getInt("reminder_minute", 0)
+
+        val timePickerDialog = TimePickerDialog(
+            this,
+            { _, hourOfDay, minute ->
+                scheduleStudyReminder(hourOfDay, minute)
+            },
+            savedHour,
+            savedMinute,
+            true // Use 24-hour format
+        )
+
+        timePickerDialog.setButton(TimePickerDialog.BUTTON_NEUTRAL, "Cancel Reminder") { _, which ->
+            if (which == TimePickerDialog.BUTTON_NEUTRAL) {
+                cancelStudyReminder()
+            }
+        }
+
+        timePickerDialog.show()
+    }
+
+    private fun scheduleStudyReminder(hour: Int, minute: Int) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Check if we can schedule exact alarms on Android 12+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Toast.makeText(this, "Please enable exact alarm permission in settings", Toast.LENGTH_LONG).show()
+                // Open settings to enable exact alarm permission
+                val intent = Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                startActivity(intent)
+                return
+            }
+        }
+
+        // Create calendar for the reminder time
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+
+            // CRITICAL FIX: If the time has already passed today, schedule for tomorrow
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(Calendar.DAY_OF_MONTH, 1)
+                Log.d(TAG, "Time has passed, scheduling for tomorrow")
+            }
+        }
+        
+        Log.d(TAG, "Scheduling alarm for: ${calendar.time}")
+        Log.d(TAG, "Current time: ${Calendar.getInstance().time}")
+
+        // Create PendingIntent for the alarm
+        val intent = Intent(this, StudyReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            REMINDER_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Cancel any existing alarm first
+        alarmManager.cancel(pendingIntent)
+
+        // Schedule the alarm using setExactAndAllowWhileIdle for better reliability
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Use setExactAndAllowWhileIdle for Android 6.0+
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+                Log.d(TAG, "Alarm scheduled with setExactAndAllowWhileIdle")
+            } else {
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+                Log.d(TAG, "Alarm scheduled with setExact")
+            }
+        } catch (e: SecurityException) {
+            Log.e(TAG, "Failed to schedule alarm", e)
+            Toast.makeText(this, "Cannot schedule exact alarm. Please check settings.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        // Save reminder time in SharedPreferences
+        val prefs = getSharedPreferences("StudyReminderPrefs", Context.MODE_PRIVATE)
+        prefs.edit().apply {
+            putInt("reminder_hour", hour)
+            putInt("reminder_minute", minute)
+            putBoolean("reminder_enabled", true)
+            putLong("next_alarm_time", calendar.timeInMillis)
+            apply()
+        }
+
+        // Update UI
+        updateReminderStatus()
+        
+        // Show when the reminder will trigger
+        val now = System.currentTimeMillis()
+        val reminderText = if (calendar.timeInMillis - now < 24 * 60 * 60 * 1000) {
+            "Reminder set for Today at ${String.format("%02d:%02d", hour, minute)}"
+        } else {
+            "Reminder set for Tomorrow at ${String.format("%02d:%02d", hour, minute)}"
+        }
+        
+        Toast.makeText(this, reminderText, Toast.LENGTH_LONG).show()
+    }
+
+    private fun cancelStudyReminder() {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Cancel the alarm
+        val intent = Intent(this, StudyReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            REMINDER_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+
+        // Clear saved reminder settings
+        val prefs = getSharedPreferences("StudyReminderPrefs", Context.MODE_PRIVATE)
+        prefs.edit().apply {
+            remove("reminder_hour")
+            remove("reminder_minute")
+            putBoolean("reminder_enabled", false)
+            apply()
+        }
+
+        // Update UI
+        updateReminderStatus()
+        Toast.makeText(this, "Daily reminder cancelled", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateReminderStatus() {
+        val prefs = getSharedPreferences("StudyReminderPrefs", Context.MODE_PRIVATE)
+        val isEnabled = prefs.getBoolean("reminder_enabled", false)
+
+        if (isEnabled) {
+            val hour = prefs.getInt("reminder_hour", 9)
+            val minute = prefs.getInt("reminder_minute", 0)
+            tvReminderStatus.text = "Daily reminder set for ${String.format("%02d:%02d", hour, minute)}"
+        } else {
+            tvReminderStatus.text = "No reminder set"
+        }
+    }
+
+    companion object {
+        private const val TAG = "StudyTrackerActivity"
+        private const val REMINDER_REQUEST_CODE = 1001
     }
 }

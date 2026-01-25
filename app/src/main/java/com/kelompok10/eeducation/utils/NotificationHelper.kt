@@ -19,11 +19,13 @@ object NotificationHelper {
     const val CHANNEL_STUDY_TIMER = "StudyTimerChannel"
     const val CHANNEL_BATTERY_ALERT = "BatteryAlertChannel"
     const val CHANNEL_GENERAL = "GeneralChannel"
+    const val CHANNEL_STUDY_REMINDER = "StudyReminderChannel"
 
     // Notification IDs
     const val NOTIFICATION_STUDY_TIMER = 1001
     const val NOTIFICATION_BATTERY_ALERT = 2001
     const val NOTIFICATION_GENERAL = 3001
+    const val NOTIFICATION_STUDY_REMINDER = 4001
 
     /**
      * Create all notification channels
@@ -63,9 +65,22 @@ object NotificationHelper {
                 description = "General app notifications"
             }
 
+            // Study Reminder Channel (High importance - daily reminders)
+            val studyReminderChannel = NotificationChannel(
+                CHANNEL_STUDY_REMINDER,
+                "Study Reminders",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Daily study reminder notifications"
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 500, 200, 500)
+                setShowBadge(true)
+            }
+
             notificationManager.createNotificationChannel(studyTimerChannel)
             notificationManager.createNotificationChannel(batteryAlertChannel)
             notificationManager.createNotificationChannel(generalChannel)
+            notificationManager.createNotificationChannel(studyReminderChannel)
         }
     }
 
