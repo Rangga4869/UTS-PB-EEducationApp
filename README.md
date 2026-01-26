@@ -123,13 +123,6 @@ Output: `app/build/outputs/apk/debug/app-debug.apk`
 ✅ **Delightful UX** - Modern UI, smooth animations  
 ✅ **Testing UI** - Espresso tests
 
-## 👨‍💻 Developer
-
-**Nama:** [Nama Anda]  
-**NIM:** [NIM Anda]  
-**Kelas:** IF703 - PJJ Informatika S1  
-**Universitas:** UTS (Universitas Tarumanagara)
-
 ## 📄 License
 
 Project ini dibuat untuk keperluan akademik UTS IF703.

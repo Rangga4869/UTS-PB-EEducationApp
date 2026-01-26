@@ -107,6 +107,12 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!-- Materi Detail Activity -->
+        <activity
+            android:name=".MateriDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".MateriActivity" />
+
     </application>
 
 </manifest>
