@@ -19,6 +19,7 @@ import com.kelompok10.eeducation.ui.viewmodel.MateriViewModel
 import com.kelompok10.eeducation.utils.DownloadPdfTask
 import com.kelompok10.eeducation.utils.NetworkUtils
 import com.kelompok10.eeducation.utils.SettingsManager
+import com.kelompok10.eeducation.utils.SyncScheduler
 import java.io.File
 
 @Suppress("DEPRECATION")
@@ -66,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         
         // Observe materi progress
         observeMateriProgress()
+
+        // Schedule nightly syllabus sync (runs automatically in background)
+        SyncScheduler.scheduleNightlySyllabusSync(this)
+        Log.d(TAG, "Nightly syllabus sync scheduled")
 
         // Show welcome message
         showWelcomeMessage()

@@ -14,6 +14,9 @@ interface MateriDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(materiList: List<Materi>)
 
+    @Query("DELETE FROM materi_table")
+    suspend fun deleteAll()
+
     @Update
     suspend fun updateMateri(materi: Materi)
 }
