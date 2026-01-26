@@ -1,9 +1,3 @@
-Tentu, ini adalah konsep aplikasi edukasi bernama **"EduSmart: Asisten Belajar Digital"**. Aplikasi ini dirancang untuk membantu mahasiswa mengelola materi kuliah, jadwal ujian, dan sinkronisasi data secara efisien.
-
-Berikut adalah rincian fitur berdasarkan komponen yang Anda minta:
-
----
-
 ### 1. Arsitektur Data Modern (Room, LiveData, ViewModel)
 
 Fitur Utama: **"My Course Library - Perpustakaan Materi Kuliah"**
