@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "judul": "Transformasi Digital: Sekolah Mulai Terapkan Kurikulum Berbasis AI",
+        "penulis": "Budi Santoso",
+        "tanggal": "2026-01-20",
+        "kategori": "Teknologi Pendidikan",
+        "ringkasan": "Kementerian Pendidikan mulai mengintegrasikan kecerdasan buatan dalam proses belajar mengajar untuk personalisasi materi siswa.",
+        "isi_berita": "Penerapan AI di sekolah bertujuan untuk membantu guru memetakan kemampuan siswa secara individu. Dengan sistem ini, materi yang diberikan akan disesuaikan dengan kecepatan belajar masing-masing anak...",
+        "tag": [
+            "AI",
+            "Digitalisasi",
+            "Kurikulum"
+        ]
+    },
+    {
+        "id": 2,
+        "judul": "Beasiswa Unggulan 2026 Resmi Dibuka untuk 5.000 Mahasiswa",
+        "penulis": "Siti Aminah",
+        "tanggal": "2026-01-15",
+        "kategori": "Beasiswa",
+        "ringkasan": "Program beasiswa tahun ini fokus pada bidang studi sains terapan dan teknologi hijau guna mendukung pembangunan berkelanjutan.",
+        "isi_berita": "Pemerintah meningkatkan kuota beasiswa hingga 20% dibandingkan tahun lalu. Prioritas diberikan kepada siswa berprestasi dari daerah tertinggal untuk melanjutkan studi ke perguruan tinggi terbaik...",
+        "tag": [
+            "Beasiswa",
+            "Perguruan Tinggi",
+            "Pemerintah"
+        ]
+    },
+    {
+        "id": 3,
+        "judul": "Pentingnya Pendidikan Inklusif bagi Anak Berkebutuhan Khusus",
+        "penulis": "Dr. Aris Munandar",
+        "tanggal": "2026-01-10",
+        "kategori": "Opini",
+        "ringkasan": "Membangun lingkungan sekolah yang ramah bagi semua anak tanpa terkecuali adalah kunci pemerataan kualitas sumber daya manusia.",
+        "isi_berita": "Pendidikan inklusif bukan sekadar menempatkan anak berkebutuhan khusus di sekolah reguler, melainkan menyiapkan sistem pendukung yang memadai, termasuk guru pendamping khusus dan fasilitas aksesibel...",
+        "tag": [
+            "Inklusi",
+            "Pendidikan Dasar",
+            "Sosial"
+        ]
+    },
+    {
+        "id": 4,
+        "judul": "Lomba Literasi Nasional Tingkat SMA Segera Digelar",
+        "penulis": "Rina Wijaya",
+        "tanggal": "2026-01-05",
+        "kategori": "Event",
+        "ringkasan": "Ajang tahunan ini bertujuan untuk meningkatkan minat baca dan kemampuan menulis kritis di kalangan generasi Z.",
+        "isi_berita": "Perhelatan tahun ini akan mencakup kompetisi menulis esai, debat bahasa, hingga pembuatan konten edukatif digital yang menarik minat para remaja di seluruh Indonesia...",
+        "tag": [
+            "Literasi",
+            "SMA",
+            "Lomba"
+        ]
+    },
+    {
+        "id": 5,
+        "judul": "Revitalisasi SMK: Fokus pada Keterampilan Industri 4.0",
+        "penulis": "Heri Kurniawan",
+        "tanggal": "2026-01-02",
+        "kategori": "Pendidikan Vokasi",
+        "ringkasan": "Kerja sama antara SMK dan industri otomotif global semakin dipererat untuk menjamin ketersediaan lapangan kerja bagi lulusan.",
+        "isi_berita": "Program sinkronisasi kurikulum industri memastikan bahwa apa yang dipelajari siswa di bengkel sekolah relevan dengan standar teknologi terbaru yang digunakan oleh pabrikan besar saat ini...",
+        "tag": [
+            "SMK",
+            "Vokasi",
+            "Industri"
+        ]
+    }
+]

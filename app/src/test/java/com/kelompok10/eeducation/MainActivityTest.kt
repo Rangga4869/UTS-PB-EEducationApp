@@ -1,6 +1,6 @@
 package com.kelompok10.eeducation
 
-import android.content.Intent
+import com.kelompok10.eeducation.ui.materi.MateriActivity
 import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before

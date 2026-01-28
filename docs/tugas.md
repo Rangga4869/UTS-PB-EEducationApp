@@ -1,0 +1,10 @@
+- Background Task
+- AsyncTask and AsyncTask Loader,
+- Internet Connection,
+- Broadcast, and Service,
+- Implementasi Alarms and Schedulers,
+- Efficient Data Transfer and JobScheduler,
+- Konsep Shared Preferences and Settings,
+- Storing Data with Room-SQLite Primer,
+- Room Live Data, and
+- View Model.

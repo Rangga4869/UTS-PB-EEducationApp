@@ -75,7 +75,7 @@ EEducationApp/
 
 1. **Clone repository**
 ```bash
-git clone https://github.com/Rangga4869/EEducationApp.git
+git clone https://github.com/username-anda/EEducationApp.git
 ```
 
 2. **Buka di Android Studio**
@@ -112,3 +112,27 @@ Output: `app/build/outputs/apk/debug/app-debug.apk`
 ```bash
 ./gradlew assembleRelease
 ```
+
+## 📋 Kriteria Penilaian yang Dipenuhi
+
+✅ **Activities and Intents** - MainActivity & MateriActivity  
+✅ **Testing** - Unit Test & UI Test  
+✅ **Debugging** - Log.d & Toast messages  
+✅ **Support Libraries** - Material, RecyclerView, CardView  
+✅ **User Interaction** - Click listeners, dialogs, navigation  
+✅ **Delightful UX** - Modern UI, smooth animations  
+✅ **Testing UI** - Espresso tests
+
+## 📄 License
+
+Project ini dibuat untuk keperluan akademik UTS IF703.
+
+## 📞 Kontak
+
+Jika ada pertanyaan, hubungi:
+- Email: [email-anda]@gmail.com
+- GitHub: [@username-anda](https://github.com/username-anda)
+
+---
+
+⭐ **Jangan lupa beri star jika project ini membantu!** ⭐
