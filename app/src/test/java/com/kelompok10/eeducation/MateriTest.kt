@@ -1,5 +1,6 @@
 package com.kelompok10.eeducation
 
+import com.kelompok10.eeducation.data.local.Materi
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -75,9 +76,9 @@ class MateriTest {
     @Test
     fun materi_equality_isCorrect() {
         // Data class harus memiliki equals() yang benar
-        val materi1 = Materi("📚", "Title", "Desc", "10 menit", true)
-        val materi2 = Materi("📚", "Title", "Desc", "10 menit", true)
-        val materi3 = Materi("💻", "Other", "Desc", "10 menit", false)
+        val materi1 = Materi(icon = "📚", title = "Title", description = "Desc", duration = "10 menit", isCompleted = true)
+        val materi2 = Materi(icon = "📚", title = "Title", description = "Desc", duration = "10 menit", isCompleted = true)
+        val materi3 = Materi(icon = "💻", title = "Other", description = "Desc", duration = "10 menit", isCompleted = false)
 
         // Verifikasi equality
         assertEquals(materi1, materi2) // Sama
@@ -127,8 +128,8 @@ class MateriTest {
     @Test
     fun materi_hashCode_isCorrect() {
         // Test hashCode consistency
-        val materi1 = Materi("📱", "Android", "Components", "30 menit", false)
-        val materi2 = Materi("📱", "Android", "Components", "30 menit", false)
+        val materi1 = Materi(icon = "📱", title = "Android", description = "Components", duration = "30 menit", isCompleted = false)
+        val materi2 = Materi(icon = "📱", title = "Android", description = "Components", duration = "30 menit", isCompleted = false)
 
         // Objects yang sama harus memiliki hashCode yang sama
         assertEquals(materi1.hashCode(), materi2.hashCode())
@@ -145,7 +146,7 @@ class MateriTest {
             isCompleted = true
         )
 
-        val (icon, title, description, duration, isCompleted) = materi
+        val (_, icon, title, description, duration, _, _, isCompleted) = materi
 
         // Verifikasi destructuring
         assertEquals("🎨", icon)
